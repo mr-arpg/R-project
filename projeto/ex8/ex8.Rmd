@@ -1,0 +1,30 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 7
+
+$X_i$ ~ $Pois(2)\Rightarrow X_1+X_2+X_3\ +...+X_{28}$ ~ $Pois(28\cdot 2)\Rightarrow$
+Semente: **1211**; Dimensão da amostra: **75**; $\lambda$: $(28\cdot 2)=$ **56**
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+#bilbiotecas
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+```
+
+```{r}
+options(digits=9)
+set.seed(515)#gerar a distribuição
+
+vetor=NULL
+
+for (i in 1 : 1500) vetor = c(vetor, 2*qnorm(0.995)*(sd(rnorm(1462, mean=11.15, sd=1.9))/sqrt(1462)))
+
+mean(vetor)
+
+
+```
+
+

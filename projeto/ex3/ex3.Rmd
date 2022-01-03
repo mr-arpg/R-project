@@ -1,0 +1,48 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 3
+
+**Nota:** Para minimizar erros, convém garantir que os ficheiros usados como base de dados (ConsumoFamilias.xlsx) estão na mesma pasta que o ficheiro com o código.
+
+
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+
+#bilbiotecas
+
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+
+```
+
+```{r eval=FALSE}
+
+#importar dados
+
+consumos <- read.xlsx("ConsumoFamilias.xlsx", 1, colNames = TRUE, rows = c(9:34),
+                        cols=c(1,9,23,28))
+
+
+consumos[consumos == 0] <- NA
+
+
+#desenhar o grafico (Chipre, Lituânia e Portugal)
+
+grafico <- melt(consumos, id.vars = "X1",
+                measure.vars = c("CY.-.Chipre", "LT.-.Lituânia", "PT.-.Portugal"))
+
+ggplot(grafico, aes(x=X1, y=value, fill=variable)) +
+  geom_bar(stat='identity', position='dodge') +
+  scale_fill_manual(name ="Países",values = c("#FFCC00","#66CCCC","#660033"))+
+  labs(title = "Consumo de famílias por país",x = "Ano",y="Despesas")+
+  scale_y_continuous(breaks=seq(0,150000.0,10000.0))+
+  scale_x_continuous(breaks=seq(1990,2020,5))
+
+```
+
+## Comentários
+
+De uma maneira geral, os consumos das famílias têm vindo gradualmente a aumentar com os anos nos três países, o que reflete o maior poder de compra e qualidade de vida que se vive atualmente. Portugal é o país que apresenta um maior consumo (talvez por ser o país dos três com maior pib, mais populoso,...). É possível especular como a crise financeira de 2010 em Portugal afetou ligeiramente a têndencia de crescimento de consumos das famílias, conforme visto no gráfico.

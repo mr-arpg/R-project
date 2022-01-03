@@ -1,0 +1,38 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 6
+
+
+
+
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+
+#bilbiotecas
+
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+
+```
+
+```{r eval=TRUE}
+
+#importar dados
+options(digits=9)
+set.seed(212)
+vetor=NULL
+
+for (i in 1 : 6500) vetor = c(vetor, mean(runif(12, min = 8, max = 12)))
+
+mean(vetor)
+
+
+
+
+
+
+```
+

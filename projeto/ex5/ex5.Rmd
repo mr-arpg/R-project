@@ -1,0 +1,42 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 5
+
+
+
+
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+
+#bilbiotecas
+
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+
+```
+
+```{r eval=TRUE}
+
+#importar dados
+
+set.seed(344)
+
+x = data.frame(col1 = rexp(170, 0.08))
+# criar a função ecdf
+e = ecdf(x$col1)
+
+#desenhar o grafico 
+ggplot(x, aes(col1)) + 
+  stat_ecdf() +
+  geom_label(aes(x = 2, y = e(2)), 
+             label = e(2), nudge_x=8)
+
+
+
+
+
+```
+

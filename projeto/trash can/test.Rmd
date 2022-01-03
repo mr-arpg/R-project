@@ -1,0 +1,18 @@
+---
+output:
+  pdf_document:
+classoption: twocolumn
+---
+
+
+
+
+\begin{minipage}[t]{0.5	extwidth}
+First Column Goodies.\
+More First Column Goodies.\
+\end{minipage}
+\begin{minipage}[t]{0.5	extwidth}
+Second Column Goodies.\
+More Second Column Goodies.\
+\end{minipage}
+

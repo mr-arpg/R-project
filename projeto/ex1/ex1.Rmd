@@ -1,0 +1,61 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 1
+
+**Nota:** Para minimizar erros, convém garantir que os ficheiros usados como base de dados (Casamentos.xlsx e Divorcios.xlsx) estão na mesma pasta que o ficheiro com o código.
+
+
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+
+#bilbiotecas
+
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+
+```
+
+```{r eval=FALSE}
+
+#importar dados
+
+casamentos <- read.xlsx("Casamentos.xlsx", 1, colNames = TRUE, rows = c(8:68),
+                        cols=c(1,9,11,14))
+divorcios <- read.xlsx("Divorcios.xlsx", 1, colNames = TRUE, rows = c(8:68),
+                       cols=c(1,9,11,14))
+
+casamentos[casamentos == 0] <- NA
+divorcios[divorcios == 0] <- NA
+
+#desenhar o grafico (Dinamarca, Chipre e Espanha)
+
+graficoC <- melt(casamentos, id.vars = "X1",
+                measure.vars = c("CY.-.Chipre", "DK.-.Dinamarca", "ES.-.Espanha"))
+graficoD <- melt(divorcios, id.vars = "X1",
+                measure.vars = c("CY.-.Chipre", "DK.-.Dinamarca", "ES.-.Espanha"))
+
+ggplot() +
+  geom_line(data=graficoC, aes(x=X1, y=value, color = variable), size=0.75) +
+  geom_point(data=graficoC, aes(x=X1, y=value, shape = "Casamentos", color = variable), 
+             size=1.5)+
+  geom_line(data=graficoD, aes(x=X1, y=value, color = variable), size=0.75) +
+  geom_point(data=graficoD, aes(x=X1, y=value, shape = "Divórcios", color = variable),
+             size=1.5)+
+  scale_color_manual(name ="Países",values = c("#FFCC00","#66CCCC","#660033"))+
+  scale_shape_manual(name ="Casamento ou Divórcio",values = c(16,4))+
+  labs(title = "Número de Casamentos e Divórcios Anuais",x = "Ano",y="Registos")+
+  scale_y_continuous(breaks=seq(0,200000,10000))+
+  scale_x_continuous(breaks=seq(1960,2020,10))
+
+```
+
+## Comentários
+
+* a Espanha é o país, dos três em questão, com mais casamentos (o que é natural, tendo mais habitantes);
+* nos três países há maior número de matrimónios do que divórcios;
+* nos três países o número de casamentos tem vindo a diminuir de uma forma geral ao longo dos anos.
+
+Não deixa de ser curioso de notar a história do direito penal de Espanha retratada no gráfico: de facto, de 1939 a 1981, o divórcio em Espanha era francamente impossível, só em caso de morte; a legislação eventualmente evoluiu até à lei do divórcio "expresso" em 2005, provocando um "boom" de divórcios.

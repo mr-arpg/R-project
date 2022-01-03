@@ -1,0 +1,41 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 7
+
+$X_i$ ~ $Pois(2)\Rightarrow X_1+X_2+X_3\ +...+X_{28}$ ~ $Pois(28\cdot 2)\Rightarrow$
+Semente: **1211**; Dimensão da amostra: **75**; $\lambda$: $(28\cdot 2)=$ **56**
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+#bilbiotecas
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+```
+
+```{r out.width="70%", fig.align='center'}
+set.seed(1211)#gerar a distribuição
+x = data.frame(col1 = rpois(75, 56))
+#criar a f.d. exata e a aproximada pela distribuição normal
+poisson = data.frame(col1= 0:100, col2 = ppois(0:100,56))
+normal = data.frame(col1= seq(0,100,by=0.1), col2 = (pnorm(seq(0,100,by=0.1), 56,
+                                                           sqrt(56))))
+#desenhar o grafico 
+ggplot() + 
+  stat_ecdf(data=x, aes(col1, color="Distribuição empírica"), geom="point") +
+  #stat_ecdf(data=x, aes(col1, color="Distribuição empírica"), geom="line") +
+  geom_point(data=poisson, aes(x=col1, y = col2, color="Distribuição exata"))+
+  #geom_line(data=poisson, aes(x=col1, y = col2, color="Distribuição exata"), 
+  #size=0.75) +
+  geom_line(data=normal, aes(x = col1, y = col2, color="Distribuição normal"), 
+            size=0.75)+
+  labs(title = "Gráficos de funções de distribuição empírica,
+exata e normal associados à amostra",x = "X",y="Probabilidade de não exceder X")+
+  scale_color_manual(name ="Legenda",values = c("#FFCC00","#66CCCC","#660033"))+
+  theme(plot.title = element_text(hjust = 0.5),legend.position=c(.8,.30))
+```
+## Comentários
+O gráfico da função de distribuição empírica difere muito pouco do gráfico da função de distribuição exata. A distribuição normal revelou-se uma boa aproximação à distribuição de poisson, tal como se esperava (56 > 10).
+
+

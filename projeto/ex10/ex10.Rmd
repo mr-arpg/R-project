@@ -1,0 +1,50 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 10
+
+Semente: **716**; $m$: **1250**; $\mu$: **9.76**; $\sigma$: **2.97**; $\mu_c$: **15.02**; $\epsilon$: **n/4** , $n \in \{100,200,...,5000\}$; $(1-\alpha)$: **0.97**
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+#bilbiotecas
+library(tidyverse)
+library(gridExtra)
+library(reshape)
+```
+
+```{r out.width="49%", fig.align='right'}
+set.seed(716)#gerar a distribuição
+vetor=NULL
+vetorc=NULL
+dummy=NULL
+grafico=data.frame()
+for(n in seq(100,5000,100)){
+  for (i in 1 : 1250){
+    dummy=rnorm(n, mean=9.76, sd=2.97)
+    vetor = c(vetor, 2*qnorm(1-(0.05/2))*(sd(dummy)/
+                                              sqrt(n)))#amplitude do IC
+    dummy=head(dummy, -n/4)
+    dummy=c(dummy, rnorm(n/4, mean=15.02, sd=2.97))
+    vetorc = c(vetorc, 2*qnorm(1-(0.05/2))*(sd(dummy)/
+                                              sqrt(n)))#amplitude do IC contaminado
+  }
+  #tabela com a primeira coluna sendo a dimensão n,a segunda coluna a média das
+  #amplitudes para esse n ñ contaminadas e a terceira coluna contaminadas
+  grafico= rbind(grafico, c(n,mean(vetor),mean(vetorc)))
+}
+names(grafico)[1] <- 'n'
+names(grafico)[2] <- 'media'
+names(grafico)[3] <- 'mediac'
+graf <- melt(grafico, id.vars = "n", measure.vars = c("media","mediac"))
+ggplot() + 
+  geom_point(data=graf, aes(x=n, y = value, color=variable), size=1.5)+
+  geom_line(data=graf, aes(x=n, y = value, color=variable), size=0.75)+
+  scale_color_manual(name ="Legenda",values = c("#FFCC00","#66CCCC"),labels = 
+                       c("não contaminado", "contaminado"))+
+  labs(title = "      Média da amplitude dos IC em função de n em amostras
+       contaminadas e não contaminadas",x = "n",y="MA")+
+  theme(plot.title = element_text(margin=margin(t=20,b=-30), hjust = 1),
+        legend.position=c(.8,.50))
+```
+

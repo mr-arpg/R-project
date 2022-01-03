@@ -1,0 +1,42 @@
+---
+output:
+  pdf_document: default
+---
+# Exercício 4
+
+**Nota:** Para minimizar erros, convém garantir que os ficheiros usados como base de dados (Pacientes.xlsx) estão na mesma pasta que o ficheiro com o código.
+
+
+
+```{r results="hide", error=FALSE, warning=FALSE, message=FALSE}
+
+#bilbiotecas
+
+library(tidyverse)
+library(openxlsx)
+library(reshape)
+
+```
+
+```{r eval=FALSE}
+
+#importar dados
+
+dados <- read.xlsx("Pacientes.xlsx", 1, colNames = TRUE, cols=c(3,4))
+
+dados[dados == 0] <- NA
+
+#desenhar o grafico
+
+plot(dados$IMC,dados$TAD,
+     xlim=c(0,40) , ylim=c(0,110), 
+     col="#69b3a2",
+     xlab="IMC", ylab="TAD",
+     main="Gráfico de dispersão entre as variáveis IMC e TAD")
+
+
+```
+
+## Comentários
+
+Pela análise do gráfico de dispersão, pode dizer-se que a correlação entre as duas variáveis IMC e TAD é positiva, isto é, um aumento no valor do Índice de Massa Corporal vem associado a um aumento no valor da Tensão Arterial Diastólica, o que faz sentido, uma vez que excesso de peso está identificado como uma das causas para pressão arterial.
